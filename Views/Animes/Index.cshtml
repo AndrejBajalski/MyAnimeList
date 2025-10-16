@@ -1,0 +1,19 @@
+﻿@using Models.DomainModels
+
+@model List<Anime>
+@{
+	ViewData["Title"] = "All";
+	Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+	@for(int i=0; i<Model.Count; i++)
+	{
+		var anime = Model[i];
+		<div class="col-3">
+			<h3>@anime.Name</h3>
+			<div>Year aired: @anime.YearAired</div>
+			<p>@anime.Description</p>
+		</div>
+	}
+</div>
