@@ -10,10 +10,26 @@
 	@for(int i=0; i<Model.Count; i++)
 	{
 		var anime = Model[i];
-		<div class="col-3">
-			<h3>@anime.Name</h3>
-			<div>Year aired: @anime.YearAired</div>
-			<p>@anime.Description</p>
+		<div class="col-6">
+			<div class="card">
+			<img src="@anime.ImageUrlSmall" alt="@anime.Name" class="card-img-top" style=""/>
+				<div class="card-body">
+				<h4 class="card-title">@anime.Name</h4>
+				<p><strong>Year aired: </strong> @anime.YearAired</p>
+				<p><strong>Genre: </strong>
+							@foreach (var genre in anime.Genres)
+							{
+							<span>
+								@genre 
+							</span>
+
+							})
+				</p>
+				<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
+				<p><strong>Rating: </strong>@anime.Rating</p>
+				<p><strong>Synopsis: </strong>@anime.Description</p>
+				</div>
+			</div>
 		</div>
 	}
 </div>

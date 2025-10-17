@@ -29,6 +29,17 @@ builder.Services.AddScoped<IAnimeService, AnimeService>();
 
 var app = builder.Build();
 
+// Register shutdown event
+var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
+var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+
+lifetime.ApplicationStopping.Register(() =>
+{
+    using var scope = scopeFactory.CreateScope();
+    var animeRepository = scope.ServiceProvider.GetRequiredService<IRepository<Anime>>();
+    animeRepository.Clear();
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
