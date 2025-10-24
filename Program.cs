@@ -26,6 +26,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<DataFetchService>();
 builder.Services.AddScoped<IAnimeService, AnimeService>();
+builder.Services.AddScoped<IUnwatchedAnimeService, UnwatchedAnimeService>();
+
 
 var app = builder.Build();
 

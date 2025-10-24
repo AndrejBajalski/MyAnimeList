@@ -10,11 +10,11 @@
 	@for(int i=0; i<Model.Count; i++)
 	{
 		var anime = Model[i];
-		<div class="col-6">
+		<div class="col-4">
 			<div class="card">
-			<img src="@anime.ImageUrlSmall" alt="@anime.Name" class="card-img-top" style=""/>
+			<img src="@anime.ImageUrl" alt="@anime.Name" class="card-img-top" style="max-height: 300px; max-width: 450px"/>
 				<div class="card-body">
-				<h4 class="card-title">@anime.Name</h4>
+				<h4 class="card-title mb-3">@anime.Name</h4>
 				<p><strong>Year aired: </strong> @anime.YearAired</p>
 				<p><strong>Genre: </strong>
 							@foreach (var genre in anime.Genres)
@@ -23,11 +23,23 @@
 								@genre 
 							</span>
 
-							})
+							}
 				</p>
 				<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
 				<p><strong>Rating: </strong>@anime.Rating</p>
-				<p><strong>Synopsis: </strong>@anime.Description</p>
+				<p><strong>Synopsis: </strong>
+						@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 50)
+						{
+							@anime.Description.Substring(0, 50) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
+						}
+						else
+						{
+							@anime.Description
+						}
+				</p>
+				</div>
+				<div>
+					<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary">Add To List</a>
 				</div>
 			</div>
 		</div>

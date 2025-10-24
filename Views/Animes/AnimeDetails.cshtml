@@ -1,0 +1,31 @@
+﻿@using Models.DomainModels
+
+@model Anime
+@{
+	ViewData["Title"] = "Model Details";
+	ViewData["Layout"] = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container row">
+	<h2 class="mb-lg-4 mb-2">@Model.Name</h2>
+	<div class="col-3">
+		<img src="@Model.ImageUrl" alt="@Model.Name" class="w-100" style="max-height: 460px" />
+	</div>
+	<div class="col-8 d-flex flex-column justify-content-center">
+		<p><strong>Title Japanese: </strong> @Model.NameJapanese</p>
+		<p><strong>Year aired: </strong> @(Model.YearAired==null ? "N/A" : Model.YearAired) </p>
+		<p>
+			<strong>Genre: </strong>
+				@foreach (var genre in Model.Genres) { <span> @genre </span> }
+		</p>
+		<p><strong>Number of episodes: </strong>@Model.NumberOfEpisodes</p>
+		<p><strong>Rating: </strong>@Model.Rating</p>
+		<p>
+			<strong>Synopsis: </strong>
+			<p>@Model.Description</p>
+		</p>
+		<div>
+		 <a asp-controller="Animes" asp-route-id="@Model.Id" class="btn btn-primary">Add To List</a>
+		</div>
+	</div>
+</div>
