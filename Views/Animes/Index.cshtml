@@ -6,6 +6,16 @@
 	Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
+
+@if (TempData["Error"] != null)
+{
+	<div class="bg-danger">@TempData["Error"]</div>
+}
+@if (TempData["Message"] != null)
+{
+	<div class="bg-pirmary">@TempData["Message"]</div>
+}
+
 <div class="row">
 	@for(int i=0; i<Model.Count; i++)
 	{
@@ -28,9 +38,9 @@
 				<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
 				<p><strong>Rating: </strong>@anime.Rating</p>
 				<p><strong>Synopsis: </strong>
-						@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 50)
+						@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 100)
 						{
-							@anime.Description.Substring(0, 50) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
+							@anime.Description.Substring(0, 100) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
 						}
 						else
 						{

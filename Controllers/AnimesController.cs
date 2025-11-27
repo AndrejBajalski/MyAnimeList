@@ -42,16 +42,22 @@ namespace MyAnimeList.Web.Controllers
         {
             Anime? anime = _animeService.GetById(id);
             string? userIdStr = _userManager.GetUserId(User);
-            if (anime!=null && userIdStr!=null)
+            if(anime == null)
             {
-                Guid userId = Guid.Parse(userIdStr);
-                _unwatchedAnimeService.AddToList(userId, anime);
+                TempData["Error"] = "Anime not found.";
+                return RedirectToAction(nameof(Index));
+            }
+            else if (userIdStr == null)
+            {
+                return RedirectToPage("/Account/Register", new {area = "Identity"});
             }
             else
             {
-                ViewBag.Message = "Anime not found.";
+                Guid userId = Guid.Parse(userIdStr);
+                _unwatchedAnimeService.AddToList(userId, anime);
+                TempData["Message"] = $"Added {anime.Name} to watch list";
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction("Index");
         }
     }
 }
