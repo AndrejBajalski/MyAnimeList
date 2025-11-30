@@ -6,14 +6,17 @@
 	Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-
 @if (TempData["Error"] != null)
 {
-	<div class="bg-danger">@TempData["Error"]</div>
+	ViewData["MessageType"] = "error";
+	ViewData["Message"] = TempData["Error"];
+	@await Html.PartialAsync("InfoBox", ViewData)
 }
 @if (TempData["Message"] != null)
 {
-	<div class="bg-pirmary">@TempData["Message"]</div>
+	ViewData["MessageType"] = "success";
+	ViewData["Message"] = TempData["Message"];
+	@await Html.PartialAsync("InfoBox", ViewData)
 }
 
 <div class="row">

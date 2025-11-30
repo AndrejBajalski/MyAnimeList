@@ -3,6 +3,7 @@ using Service.Interface;
 using Service.Implementation;
 using Models.DomainModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyAnimeList.Web.Controllers
 {
@@ -38,6 +39,7 @@ namespace MyAnimeList.Web.Controllers
             return View("AnimeDetails", anime);
         }
 
+        [Authorize]
         public IActionResult AddToList(Guid id)
         {
             Anime? anime = _animeService.GetById(id);
@@ -46,10 +48,6 @@ namespace MyAnimeList.Web.Controllers
             {
                 TempData["Error"] = "Anime not found.";
                 return RedirectToAction(nameof(Index));
-            }
-            else if (userIdStr == null)
-            {
-                return RedirectToPage("/Account/Register", new {area = "Identity"});
             }
             else
             {

@@ -1,0 +1,48 @@
+﻿@using Models.Enums
+@model AnimeStatus
+
+@{
+    string color = "gray";
+    switch (Model)
+    {
+        case AnimeStatus.Watching:
+            color = "green"; break;
+        case AnimeStatus.Paused:
+            color = "yellow"; break;
+        case AnimeStatus.Completed:
+            color = "red"; break;
+        case AnimeStatus.PlanToWatch:
+            color = "blue"; break;
+    }
+
+    <div><span class="status-dot status-@color"></span> @Model</div>
+}
+
+<style>
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-green {
+    background-color: #28a745;
+}
+
+.status-yellow {
+    background-color: #ffc107;
+}
+
+.status-red {
+    background-color: #dc3545;
+}
+
+.status-gray {
+    background-color: #6c757d;
+}
+
+.status-blue{
+    background-color: blue;
+}
+</style>

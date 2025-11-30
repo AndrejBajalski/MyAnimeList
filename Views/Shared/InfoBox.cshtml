@@ -1,10 +1,39 @@
 ﻿@{
-	
-	<div id="info-box" class="bg-blue-100" >@ViewBag.Message</div> 
+	string colorClass;
+	switch (ViewData["MessageType"])
+	{
+		case "error":
+			colorClass = "bg-red-200"; break;
+		case "success":
+			colorClass = "bg-success-100"; break;
+		case "info":
+			colorClass = "bg-blue-100"; break;
+		default:
+			colorClass = "bg-blue-100"; break;
+	}
+	<div class="info-box @colorClass mb-3" >@ViewData["Message"]</div> 
 }
 
 <style>
-	#info-box{
-		background-color: $blue-100;
+	.info-box{
+		border: 2px solid;
+		border-radius: 5px;
+		font-size: 1.3rem;
+		padding: 1rem;
+	 }
+	 .bg-blue-100{
+		 background-color: #bbdefb;
+		 color: #1285CC;
+		 border-color: #1285CC;
 	}
+	 .bg-red-200{
+		background-color: #FF8A8A;
+		color: #D10000;
+		border-color: #D10000;
+	 }
+	 .bg-success-100{
+		background-color: #A0FF78;
+		color: #266E08;
+		border-color: #266E08;
+	 }
 </style>
