@@ -14,47 +14,76 @@
 }
 @if (TempData["Message"] != null)
 {
-	ViewData["MessageType"] = "success";
+	ViewData["MessageType"] = TempData["MessageType"];
 	ViewData["Message"] = TempData["Message"];
 	@await Html.PartialAsync("InfoBox", ViewData)
 }
 
-<div class="row">
-	@for(int i=0; i<Model.Count; i++)
-	{
-		var anime = Model[i];
-		<div class="col-4">
-			<div class="card">
-			<img src="@anime.ImageUrl" alt="@anime.Name" class="card-img-top" style="max-height: 300px; max-width: 450px"/>
-				<div class="card-body">
-				<h4 class="card-title mb-3">@anime.Name</h4>
-				<p><strong>Year aired: </strong> @anime.YearAired</p>
-				<p><strong>Genre: </strong>
+<h1>All Animes</h1>
+<div class="main">
+	<div class="row">
+		@for(int i=0; i<Model.Count; i++)
+		{
+			var anime = Model[i];
+			<div class="col-4 p-3">
+				<div class="card">
+					<img src="@anime.ImageUrl" alt="@anime.Name" class="card-img-top" style="max-height: 300px;"/>
+					<div class="card-body">
+						<h4 class="card-title mb-3">@anime.Name</h4>
+						<p><strong>Year aired: </strong> @anime.YearAired</p>
+						<p><strong>Genre: </strong>
 							@foreach (var genre in anime.Genres)
 							{
-							<span>
-								@genre 
-							</span>
+								<span>
+									@genre 
+								</span>
 
 							}
-				</p>
-				<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
-				<p><strong>Rating: </strong>@anime.Rating</p>
-				<p><strong>Synopsis: </strong>
-						@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 100)
-						{
-							@anime.Description.Substring(0, 100) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
-						}
-						else
-						{
-							@anime.Description
-						}
-				</p>
-				</div>
-				<div>
-					<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary">Add To List</a>
+						</p>
+						<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
+						<p><strong>Rating: </strong>@anime.Rating</p>
+						<p><strong>Synopsis: </strong>
+							@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 100)
+							{
+								@anime.Description.Substring(0, 100) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
+							}
+							else
+							{
+								@anime.Description
+							}
+						</p>
+					</div>
+					<div>
+						<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary">Add To List</a>
+					</div>
 				</div>
 			</div>
-		</div>
-	}
+		}
+	</div>
+	<form asp-action="GetPage" method="get" class="pages-bar">
+		@{
+			int prev = ViewBag.Page.current_page  - 1;
+			int next = ViewBag.Page.current_page  + 1;
+		}
+		<button type="submit" disabled="@(prev<1)" name="page" value="@next">Previous page</button>
+		<span>Page @ViewBag.Page.current_page out of @ViewBag.Page.last_visible_page</span>
+		<button type="submit" disabled="@(!ViewBag.Page.has_next_page)" name="page" value="@next">Next page</button>
+	</form>
 </div>
+
+<style>
+	.main{
+		display: flex;
+		justify-content: center;
+		padding: 1rem 10%;
+		flex-wrap: wrap;
+	}
+	.main row .card {
+		width: 550px;
+	}
+	.pages-bar{
+		width: 70%;
+		text-align: center;
+		margin: 1rem 0;
+	}
+</style>

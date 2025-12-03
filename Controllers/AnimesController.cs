@@ -24,11 +24,20 @@ namespace MyAnimeList.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Anime> allAnimes = await _animeService.GetAll();
+            var response = await _animeService.GetAll();
+            List<Anime> allAnimes = response.Animes;
+            ViewBag.Page = response.Page;
             return View(allAnimes);
         }
 
-        [Route("Animes/{id}")]
+        public async Task<IActionResult> GetPage(int page)
+        {
+            var response = await _animeService.GetByPage(page);
+            List<Anime> byPage = response.Animes;
+            ViewBag.Page = response.Page;
+            return View("Index", byPage);
+        }
+
         public IActionResult GetAnimeById(Guid id)
         {
             Anime? anime = _animeService.GetById(id);
@@ -49,13 +58,18 @@ namespace MyAnimeList.Web.Controllers
                 TempData["Error"] = "Anime not found.";
                 return RedirectToAction(nameof(Index));
             }
-            else
+            var unwatched = _unwatchedAnimeService.GetByUserAndAnimeId(Guid.Parse(userIdStr), id);
+            if(unwatched != null)
             {
-                Guid userId = Guid.Parse(userIdStr);
-                _unwatchedAnimeService.AddToList(userId, anime);
-                TempData["Message"] = $"Added {anime.Name} to watch list";
+                TempData["MessageType"] = "info";
+                TempData["Message"] = "This anime is already added to your watch list";
                 return RedirectToAction(nameof(Index));
             }
+                Guid userId = Guid.Parse(userIdStr);
+                _unwatchedAnimeService.AddToList(userId, anime);
+                TempData["MessageType"] = "success";
+                TempData["Message"] = $"Added {anime.Name} to watch list";
+                return RedirectToAction(nameof(Index));
         }
     }
 }
