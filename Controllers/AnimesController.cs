@@ -4,6 +4,8 @@ using Service.Implementation;
 using Models.DomainModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Models.DTO;
 
 namespace MyAnimeList.Web.Controllers
 {
@@ -22,9 +24,17 @@ namespace MyAnimeList.Web.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? keyword, int page=1)
         {
-            var response = await _animeService.GetAll();
+            PaginatedResponse response;
+            if (!keyword.IsNullOrEmpty())
+            {
+                response = await _animeService.GetByKeywordSearch(keyword, page);
+            }
+            else
+            {
+                response = await _animeService.GetByPage(page);
+            }
             List<Anime> allAnimes = response.Animes;
             ViewBag.Page = response.Page;
             return View(allAnimes);

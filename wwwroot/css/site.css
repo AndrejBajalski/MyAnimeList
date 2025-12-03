@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.bg-lilac-1 {
+   background-color: #832be3 
+}
+.text-lilac-0 {
+    color: #C39EF0;
+}
+.text-lilac-1 {
+    color: #832be3;
+}

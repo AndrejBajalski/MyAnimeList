@@ -21,6 +21,10 @@
 
 <h1>All Animes</h1>
 <div class="main">
+	<form asp-action="Index" method="get" class="keyword-search-form">
+		<input type="text" name="keyword" placeholder="Search anime" />
+		<button type="submit" class="btn bg-lilac-1">Search</button>
+	</form>
 	<div class="row">
 		@for(int i=0; i<Model.Count; i++)
 		{
@@ -60,7 +64,7 @@
 			</div>
 		}
 	</div>
-	<form asp-action="GetPage" method="get" class="pages-bar">
+	<form asp-action="Index" method="get" class="pages-bar">
 		@{
 			int prev = ViewBag.Page.current_page  - 1;
 			int next = ViewBag.Page.current_page  + 1;
@@ -85,5 +89,29 @@
 		width: 70%;
 		text-align: center;
 		margin: 1rem 0;
+	}
+	.keyword-search-form{
+		font-size: 1.2rem;
+		margin-bottom: 3rem;
+		width: 70%;
+		display: flex;
+		align-items: center;
+	}
+	.keyword-search-form input {
+		width: 80%;
+		height: 2rem;
+		box-sizing: border-box;
+		padding: 20px 10px;
+		border-radius: 10px;
+		margin-right: 10px;
+		border-color: #832be3;
+	}
+
+    .keyword-search-form button{
+		width: 15%;
+		font-size: 1.2rem;
+		height: 40px;
+		box-sizing: border-box;
+		color: white;
 	}
 </style>
