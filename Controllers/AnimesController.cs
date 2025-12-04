@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Models.DTO;
+using Models.Enums;
+using System.Security.Claims;
 
 namespace MyAnimeList.Web.Controllers
 {
@@ -26,26 +28,20 @@ namespace MyAnimeList.Web.Controllers
 
         public async Task<IActionResult> Index(string? keyword, int page=1)
         {
-            PaginatedResponse response;
+            PaginatedResponse response = await _animeService.GetAll(keyword, page);
             if (!keyword.IsNullOrEmpty())
+                ViewBag.Keyword = keyword;
+            List<Anime> allAnimes = response.Animes;
+            if (User.Identity.IsAuthenticated)
             {
-                response = await _animeService.GetByKeywordSearch(keyword, page);
+                List<AnimeStatus> statuses = _unwatchedAnimeService.AlreadyInWatchList(allAnimes, Guid.Parse(_userManager.GetUserId(User)));
+                ViewBag.Statuses = statuses;
+                ViewBag.IsAuth = true;
             }
             else
-            {
-                response = await _animeService.GetByPage(page);
-            }
-            List<Anime> allAnimes = response.Animes;
+                ViewBag.IsAuth = false;
             ViewBag.Page = response.Page;
             return View(allAnimes);
-        }
-
-        public async Task<IActionResult> GetPage(int page)
-        {
-            var response = await _animeService.GetByPage(page);
-            List<Anime> byPage = response.Animes;
-            ViewBag.Page = response.Page;
-            return View("Index", byPage);
         }
 
         public IActionResult GetAnimeById(Guid id)

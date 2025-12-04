@@ -6,6 +6,7 @@ using Repository.Interface;
 using Repository.Implementation;
 using Service.Implementation;
 using Service.Interface;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<DataFetchService>();
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IUnwatchedAnimeService, UnwatchedAnimeService>();
-
+builder.Services.AddHostedService<ShutdownCleanupService>();
 
 var app = builder.Build();
 

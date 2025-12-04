@@ -1,4 +1,6 @@
 ﻿@using Models.DomainModels
+@using Models.Enums
+
 
 @model List<Anime>
 @{
@@ -22,7 +24,7 @@
 <h1>All Animes</h1>
 <div class="main">
 	<form asp-action="Index" method="get" class="keyword-search-form">
-		<input type="text" name="keyword" placeholder="Search anime" />
+		<input type="text" name="keyword" value="@(ViewBag.Keyword ?? "")" placeholder="Search anime" />
 		<button type="submit" class="btn bg-lilac-1">Search</button>
 	</form>
 	<div class="row">
@@ -46,6 +48,13 @@
 						</p>
 						<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
 						<p><strong>Rating: </strong>@anime.Rating</p>
+						@if (User.Identity.IsAuthenticated)
+						{
+							AnimeStatus status = ViewBag.Statuses[i];
+							<p><strong>Status: </strong>
+								<div> @await Html.PartialAsync("StatusDot", status)</div>
+							</p>
+						}
 						<p><strong>Synopsis: </strong>
 							@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 100)
 							{
@@ -69,7 +78,7 @@
 			int prev = ViewBag.Page.current_page  - 1;
 			int next = ViewBag.Page.current_page  + 1;
 		}
-		<button type="submit" disabled="@(prev<1)" name="page" value="@next">Previous page</button>
+		<button type="submit" disabled="@(prev<1)" name="page" value="@prev">Previous page</button>
 		<span>Page @ViewBag.Page.current_page out of @ViewBag.Page.last_visible_page</span>
 		<button type="submit" disabled="@(!ViewBag.Page.has_next_page)" name="page" value="@next">Next page</button>
 	</form>
