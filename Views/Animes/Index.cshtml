@@ -66,8 +66,17 @@
 							}
 						</p>
 					</div>
-					<div>
-						<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary">Add To List</a>
+					<div style="position: relative; margin-top: 1rem">
+						@if (ViewBag.Statuses == null || ViewBag.Statuses[i]==AnimeStatus.NotInList)
+						{
+							<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary bottom-right-corner" style="padding: 10px;">
+								Add To List
+							</a>
+						}
+						else
+						{
+							<span class="info-box bottom-right-corner">Added to Watch List</span>
+						}
 					</div>
 				</div>
 			</div>
@@ -91,8 +100,12 @@
 		padding: 1rem 10%;
 		flex-wrap: wrap;
 	}
-	.main row .card {
-		width: 550px;
+	.card {
+		/* width: 550px; */
+		height: 100%;
+	}
+	.card-title{
+		height: 60px;
 	}
 	.pages-bar{
 		width: 70%;
@@ -122,5 +135,17 @@
 		height: 40px;
 		box-sizing: border-box;
 		color: white;
+	}
+	.info-box{
+		font-size: 1rem;
+		border: 2px solid #27D927;
+		border-radius: 5px;
+		color: #27D927;
+		padding: 10px;
+	}
+	.bottom-right-corner {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
 	}
 </style>
