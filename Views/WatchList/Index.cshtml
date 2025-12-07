@@ -6,7 +6,7 @@
 @{
 	AnimeStatus nextStatus = AnimeStatus.PlanToWatch;
 	string actionName;
-	bool canPause=false, completed=false;
+	bool canPause=false, completed=false, reviewAdded=false;
 }
 @if (TempData["Message"] != null)
 {
@@ -18,73 +18,84 @@
 <h1 class="mt-3">Your Watch List</h1>
 
 <div class="main">
-<div class="status-navbar" >
-	<a class=@(ViewBag.Status==AnimeStatus.All ? "selected" : "") asp-action="Index">All (@ViewBag.StatusCount[AnimeStatus.All])</a>
-	<a class="@(ViewBag.Status==AnimeStatus.PlanToWatch ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.PlanToWatch)">Planned (@ViewBag.StatusCount[AnimeStatus.PlanToWatch])</a>
-	<a class="@(ViewBag.Status==AnimeStatus.Watching ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Watching)">Watching (@ViewBag.StatusCount[AnimeStatus.Watching])</a>
-	<a class="@(ViewBag.Status==AnimeStatus.Completed ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Completed)">Completed (@ViewBag.StatusCount[AnimeStatus.Completed])</a>
-	<a class="@(ViewBag.Status==AnimeStatus.Paused ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Paused)">Paused (@ViewBag.StatusCount[AnimeStatus.Paused])</a>
-</div>
+	<div class="status-navbar" >
+		<a class=@(ViewBag.Status==AnimeStatus.All ? "selected" : "") asp-action="Index">All (@ViewBag.StatusCount[AnimeStatus.All])</a>
+		<a class="@(ViewBag.Status==AnimeStatus.PlanToWatch ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.PlanToWatch)">Planned (@ViewBag.StatusCount[AnimeStatus.PlanToWatch])</a>
+		<a class="@(ViewBag.Status==AnimeStatus.Watching ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Watching)">Watching (@ViewBag.StatusCount[AnimeStatus.Watching])</a>
+		<a class="@(ViewBag.Status==AnimeStatus.Completed ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Completed)">Completed (@ViewBag.StatusCount[AnimeStatus.Completed])</a>
+		<a class="@(ViewBag.Status==AnimeStatus.Paused ? "selected" : "")" asp-action="Index" asp-route-status="@(AnimeStatus.Paused)">Paused (@ViewBag.StatusCount[AnimeStatus.Paused])</a>
+	</div>
 
-<form asp-controller="WatchList" class="d-flex flex-column align-items-center">
-	@{
-		if(Model.Count == 0)
-		{
-			<h2 class="text-secondary m-4">No saved movies in this category</h2>
-		}
-		for(int i=0; i<Model.Count; i++)
-		{
-			<div class="row row-@(i%2)">
-				<div class="col-4">
-					<img src="@Model[i].Anime.ImageUrl" alt="@Model[i].Anime.Name"/>
-				</div>
-				<div class="col-3">
-					<h3>@Model[i].Anime.Name</h3>
-					<div><strong>Title Japanese: </strong>@Model[i].Anime.NameJapanese</div>
-				</div>
-				<div class="col-2">
-					<div><strong>Status:</strong></div>
-					<div>
-						@await Html.PartialAsync("StatusDot", Model[i].Status)
+	<form asp-controller="WatchList" class="d-flex flex-column align-items-center">
+		@{
+			if(Model.Count == 0)
+			{
+				<h2 class="text-secondary m-4">No saved movies in this category</h2>
+			}
+			for(int i=0; i<Model.Count; i++)
+			{
+				<div class="row row-@(i%2)">
+					<div class="col-4">
+						<img src="@Model[i].Anime.ImageUrl" alt="@Model[i].Anime.Name"/>
 					</div>
-				</div>
-				<div class="col-3 d-flex flex-column justify-content-between">
-					@switch (Model[i].Status)
-					{
-						case AnimeStatus.PlanToWatch:
-							nextStatus = AnimeStatus.Watching;
-							actionName = "Start Watching";
-							canPause = false;
-							completed = false; break;
-						case AnimeStatus.Watching:
-							nextStatus = AnimeStatus.Completed;
-							actionName = "Add to Completed";
-							canPause = true;
-							completed = false; break;
-						case AnimeStatus.Paused:
-							nextStatus = AnimeStatus.Watching;
-							actionName = "Continue Watching";
-							canPause = false;
-							completed = false; break;
-						case AnimeStatus.Completed:
-							completed = true;
-							canPause = false;
-							actionName = "Rate"; break;
-						default:
-							nextStatus = AnimeStatus.Watching;
-							actionName = "Start Watching";
-							canPause = false;
-							completed = false; break;
+					<div class="col-3">
+						<h3>@Model[i].Anime.Name</h3>
+						<div><strong>Title Japanese: </strong>@Model[i].Anime.NameJapanese</div>
+					</div>
+					<div class="col-2">
+						<div><strong>Status:</strong></div>
+						<div>
+							@await Html.PartialAsync("StatusDot", Model[i].Status)
+						</div>
+					</div>
+					<div class="col-3 d-flex flex-column justify-content-between">
+						@switch (Model[i].Status)
+						{
+							case AnimeStatus.PlanToWatch:
+								nextStatus = AnimeStatus.Watching;
+								actionName = "Start Watching";
+								canPause = false;
+								completed = false; break;
+							case AnimeStatus.Watching:
+								nextStatus = AnimeStatus.Completed;
+								actionName = "Add to Completed";
+								canPause = true;
+								completed = false; break;
+							case AnimeStatus.Paused:
+								nextStatus = AnimeStatus.Watching;
+								actionName = "Continue Watching";
+								canPause = false;
+								completed = false; break;
+							case AnimeStatus.Completed:
+								completed = true;
+								canPause = false;
+								actionName = "Rate"; break;
+							case AnimeStatus.ReviewAdded:
+								reviewAdded = true;
+								canPause = false;
+								actionName = "Edit review"; break;
+							default:
+								nextStatus = AnimeStatus.PlanToWatch;
+								actionName = "Start Watching";
+								canPause = false;
+								completed = false; break;
+						}
+				@{
+					if(completed){
+						<button type="submit" class="btn btn-success m-2" asp-controller="Reviews" asp-action="Index" asp-route-animeId="@Model[i].Anime.Id">Add Review</button>
 					}
-					@if(completed){
-						<button type="submit" class="btn btn-success m-2" asp-action="AddRating" asp-route-id="@Model[i].Id">Add Rating</button>
-					}else{
+					else if (reviewAdded)
+					{
+						<button type="submit" class="btn btn-success m-2" asp-controller="Reviews" asp-action="UpdateReview" asp-route-animeId="@Model[i].Anime.Id">Edit review</button>
+					}
+					else{
 						<button type="submit" class="btn btn-primary m-2" asp-action="UpdateStatus" asp-route-id="@Model[i].Id" asp-route-status="@nextStatus">@actionName</button>
 					}
-					@if (canPause)
+					if (canPause)
 					{
 						<button type="submit" class="btn btn-warning m-2" asp-action="UpdateStatus" asp-route-id="@Model[i].Id" asp-route-status="@(AnimeStatus.Paused)">Pause</button>
 					}
+				}
 					<button type="submit" class="btn btn-danger m-2" asp-action="RemoveFromList" asp-route-id="@Model[i].Id">Remove from list</button>
 				</div>
 			</div>
@@ -123,7 +134,15 @@
 		box-sizing: border-box;
 		padding: 1rem 0;
 	}
+	.row:first-child{
+		border-width: 2px 3px 2px 3px;
+	}
 	.row-1{
 		background-color: lightgray;
+	}
+	.row, .row-1{
+		border-width: 0 3px 2px 3px;
+		border-color: #4343E0;
+		border-style: solid;
 	}
 </style>

@@ -42,7 +42,7 @@ namespace MyAnimeList.Web.Controllers
         {
             var removed = _unwatchedAnimeService.RemoveFromList(id);
             TempData["Message"] = $"Successfully removed {removed?.Anime?.Name ?? "anime"} from Watch List!";
-            TempData["MessageType"] = "success";
+            TempData["MessageType"] = MessageType.Success;
             return RedirectToAction(nameof(Index));
         }
         public IActionResult UpdateStatus(Guid id, AnimeStatus status)
@@ -51,11 +51,7 @@ namespace MyAnimeList.Web.Controllers
             unWatched.Status = status;
             _unwatchedAnimeService.Update(unWatched);
             TempData["Message"] = $"Changed status of {unWatched?.Anime?.Name ?? "anime"} to {StatusReader.StatusToString(status)}!";
-            TempData["MessageType"] = "info";
-            return RedirectToAction(nameof(Index));
-        }
-        public ActionResult AddRating(Guid id)
-        {
+            TempData["MessageType"] = MessageType.Info;
             return RedirectToAction(nameof(Index));
         }
     }

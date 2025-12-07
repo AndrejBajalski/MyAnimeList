@@ -1,0 +1,60 @@
+﻿@using Models.DomainModels
+
+@model Anime 
+
+@if (TempData["Message"] != null)
+{
+	ViewData["MessageType"] = TempData["MessageType"];
+	ViewData["Message"] = TempData["Message"];
+	@await Html.PartialAsync("InfoBox", ViewData)
+}
+@{
+	var reviewText = TempData["Content"]==null ? "" : Convert.ToString(TempData["Content"]);
+	int rating = TempData["Rating"] == null ? 5 : Convert.ToInt32(TempData["Rating"]);
+	bool update = TempData["Rating"] != null;
+	List<string> ratingLabels = new List<string> { "Bad", "Not good", "Mid", "Good", "Very Good", "Sugoi"};
+}
+
+<h1>Give your review for @Model.Name</h1>
+<div class="review-main">
+	<form asp-action="@(update ? "UpdateReviewPost" : "AddReview")" method="post">
+		<input hidden name="animeId" value="@Model.Id"/>
+		<div>
+			<h4>Rate this show</h4>
+			<select required name="rating" id="rating-select">
+				@for(int i=0; i<ratingLabels.Count; i++)
+				{
+					int val = i + 5;
+					if(update && val==rating){
+					<option value="@val" selected>@(val + " - " + ratingLabels[i])</option>
+				}else{
+					<option value="@val">@(val + " - " + ratingLabels[i])</option>
+				}
+			}
+			</select>
+		</div>
+		<div>
+			<h4>Write your review</h4>
+			<textarea id="add-review-text" type="text" name="comment" placeholder="Write your comments about this anime...">@reviewText</textarea>
+		</div>
+		<button type="submit" class="btn btn-lilac-1">@(update? "Edit Review" : "Add Review")</button>
+	</form>
+</div>
+
+<style>
+	.review-main{
+		margin-top: 2rem;
+		width: 50%;
+	}
+	.review-main form>div{
+		margin-bottom: 2rem;
+	}
+	#rating-select{
+		width: 160px;
+	}
+	#add-review-text{
+		width: 100%;
+		min-height: 10rem;
+		padding-top: 8px;
+	}
+</style>

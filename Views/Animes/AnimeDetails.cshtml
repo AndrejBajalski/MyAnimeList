@@ -1,4 +1,5 @@
 ﻿@using Models.DomainModels
+@using Models.Enums
 
 @model Anime
 @{
@@ -18,14 +19,22 @@
 			<strong>Genre: </strong>
 				@foreach (var genre in Model.Genres) { <span> @genre </span> }
 		</p>
-		<p><strong>Number of episodes: </strong>@Model.NumberOfEpisodes</p>
-		<p><strong>Rating: </strong>@Model.Rating</p>
+		<p><strong>Number of episodes: </strong>@(Model.NumberOfEpisodes==null ? "N/A" : Model.NumberOfEpisodes)</p>
+		<p><strong>Rating: </strong>@(Model.Rating==null ? "N/A" : Model.Rating)</p>
 		<p>
 			<strong>Synopsis: </strong>
 			<p>@Model.Description</p>
 		</p>
 		<div>
-		 <a asp-controller="Animes" asp-route-id="@Model.Id" class="btn btn-primary">Add To List</a>
+			@if(ViewBag.Status==AnimeStatus.NotInList){
+				<a asp-controller="Animes" asp-route-id="@Model.Id" class="btn btn-primary">Add To List</a>
+			}
+			else if(ViewBag.Status==AnimeStatus.Completed){
+				<a asp-controller="Rating" asp-action="AddRating" asp-route-id="@Model.Id" class="btn btn-primary">Add To List</a>
+			}
+			else{
+				<a asp-controller="WatchList" asp-action="Index" class="btn info-box">To Watch List</a>
+			}
 		</div>
 	</div>
 </div>

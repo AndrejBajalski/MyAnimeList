@@ -6,6 +6,7 @@
 @{
 	ViewData["Title"] = "All";
 	Layout = "~/Pages/Shared/_Layout.cshtml";
+	bool isAuthenticated = User.Identity.IsAuthenticated;
 }
 
 @if (TempData["Error"] != null)
@@ -32,11 +33,11 @@
 		{
 			var anime = Model[i];
 			<div class="col-4 p-3">
-				<div class="card">
-					<img src="@anime.ImageUrl" alt="@anime.Name" class="card-img-top" style="max-height: 300px;"/>
+				<div class="card border-lilac-1">
+					<img src="@anime.ImageUrl" alt="@anime.Name" class="card-img-top border-lilac-1" style="max-height: 300px;"/>
 					<div class="card-body">
-						<h4 class="card-title mb-3">@anime.Name</h4>
-						<p><strong>Year aired: </strong> @anime.YearAired</p>
+						<a asp-action="GetAnimeById" asp-route-id="@anime.Id" asp-route-status="@(isAuthenticated? ViewBag.Statuses[i] : AnimeStatus.NotInList)" class="card-title text-lilac-1">@anime.Name</a>
+						<p><strong>Year aired: </strong> @(anime.YearAired==null? "N/A":anime.YearAired)</p>
 						<p><strong>Genre: </strong>
 							@foreach (var genre in anime.Genres)
 							{
@@ -48,7 +49,7 @@
 						</p>
 						<p><strong>Number of episodes: </strong>@anime.NumberOfEpisodes</p>
 						<p><strong>Rating: </strong>@anime.Rating</p>
-						@if (User.Identity.IsAuthenticated)
+						@if (isAuthenticated)
 						{
 							AnimeStatus status = ViewBag.Statuses[i];
 							<p><strong>Status: </strong>
@@ -58,7 +59,9 @@
 						<p><strong>Synopsis: </strong>
 							@if (!string.IsNullOrEmpty(anime.Description) && anime.Description.Length > 100)
 							{
-								@anime.Description.Substring(0, 100) <a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id"> See more </a>
+								@anime.Description.Substring(0, 100)
+								<a asp-controller="Animes" asp-action="GetAnimeById" asp-route-id="@anime.Id" asp-route-status="@(isAuthenticated? ViewBag.Statuses[i] : AnimeStatus.NotInList)">
+									See more </a>
 							}
 							else
 							{
@@ -69,13 +72,13 @@
 					<div style="position: relative; margin-top: 1rem">
 						@if (ViewBag.Statuses == null || ViewBag.Statuses[i]==AnimeStatus.NotInList)
 						{
-							<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary bottom-right-corner" style="padding: 10px;">
+							<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary bottom-right-corner bg-lilac-1" style="padding: 10px;">
 								Add To List
 							</a>
 						}
 						else
 						{
-							<span class="info-box bottom-right-corner">Added to Watch List</span>
+							<span class="success-box bottom-right-corner">Added to Watch List</span>
 						}
 					</div>
 				</div>
@@ -101,11 +104,15 @@
 		flex-wrap: wrap;
 	}
 	.card {
-		/* width: 550px; */
 		height: 100%;
 	}
 	.card-title{
 		height: 60px;
+		text-decoration: none;
+		font-size: 22px;
+		font-weight: bold;
+		display: inline-block;
+		line-height: 2rem;
 	}
 	.pages-bar{
 		width: 70%;
@@ -135,13 +142,6 @@
 		height: 40px;
 		box-sizing: border-box;
 		color: white;
-	}
-	.info-box{
-		font-size: 1rem;
-		border: 2px solid #27D927;
-		border-radius: 5px;
-		color: #27D927;
-		padding: 10px;
 	}
 	.bottom-right-corner {
 		position: absolute;

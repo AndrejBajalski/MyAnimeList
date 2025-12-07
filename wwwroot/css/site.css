@@ -21,12 +21,31 @@ body {
   margin-bottom: 60px;
 }
 
+.success-box {
+    font-size: 1rem;
+    border: 2px solid #27D927;
+    border-radius: 5px;
+    color: #27D927;
+    padding: 10px;
+}
+
 .bg-lilac-1 {
    background-color: #832be3 
+}
+.bg-blue-2 {
+    background-color: #4343E0;
 }
 .text-lilac-0 {
     color: #C39EF0;
 }
 .text-lilac-1 {
     color: #832be3;
+}
+.border-lilac-1{
+    border: 2px solid #832be3;
+}
+.btn-lilac-1 {
+    padding: 10px;
+    color: white;
+    background-color: #832be3;
 }

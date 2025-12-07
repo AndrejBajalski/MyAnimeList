@@ -1,12 +1,14 @@
-﻿@{
+﻿@using Models.Enums;
+
+@{
 	string colorClass;
 	switch (ViewData["MessageType"])
 	{
-		case "error":
+		case MessageType.Error:
 			colorClass = "bg-red-200"; break;
-		case "success":
+		case MessageType.Success:
 			colorClass = "bg-success-100"; break;
-		case "info":
+		case MessageType.Info:
 			colorClass = "bg-blue-100"; break;
 		default:
 			colorClass = "bg-blue-100"; break;

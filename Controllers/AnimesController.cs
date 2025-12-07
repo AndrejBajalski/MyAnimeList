@@ -44,13 +44,14 @@ namespace MyAnimeList.Web.Controllers
             return View(allAnimes);
         }
 
-        public IActionResult GetAnimeById(Guid id)
+        public IActionResult GetAnimeById(Guid id, AnimeStatus status)
         {
             Anime? anime = _animeService.GetById(id);
             if(anime == null)
             {
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Status = status;
             return View("AnimeDetails", anime);
         }
 
@@ -67,13 +68,13 @@ namespace MyAnimeList.Web.Controllers
             var unwatched = _unwatchedAnimeService.GetByUserAndAnimeId(Guid.Parse(userIdStr), id);
             if(unwatched != null)
             {
-                TempData["MessageType"] = "info";
+                TempData["MessageType"] = MessageType.Info;
                 TempData["Message"] = "This anime is already added to your watch list";
                 return RedirectToAction(nameof(Index));
             }
                 Guid userId = Guid.Parse(userIdStr);
                 _unwatchedAnimeService.AddToList(userId, anime);
-                TempData["MessageType"] = "success";
+                TempData["MessageType"] = MessageType.Success;
                 TempData["Message"] = $"Added {anime.Name} to watch list";
                 return RedirectToAction(nameof(Index));
         }

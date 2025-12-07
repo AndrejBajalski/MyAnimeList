@@ -28,6 +28,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<DataFetchService>();
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IUnwatchedAnimeService, UnwatchedAnimeService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddHostedService<ShutdownCleanupService>();
 
 var app = builder.Build();
