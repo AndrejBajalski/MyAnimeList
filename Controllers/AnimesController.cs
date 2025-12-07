@@ -34,7 +34,7 @@ namespace MyAnimeList.Web.Controllers
             List<Anime> allAnimes = response.Animes;
             if (User.Identity.IsAuthenticated)
             {
-                List<AnimeStatus> statuses = _unwatchedAnimeService.AlreadyInWatchList(allAnimes, Guid.Parse(_userManager.GetUserId(User)));
+                List<AnimeStatus> statuses = _unwatchedAnimeService.AlreadyInWatchList(allAnimes, _userManager.GetUserId(User));
                 ViewBag.Statuses = statuses;
                 ViewBag.IsAuth = true;
             }
@@ -65,15 +65,14 @@ namespace MyAnimeList.Web.Controllers
                 TempData["Error"] = "Anime not found.";
                 return RedirectToAction(nameof(Index));
             }
-            var unwatched = _unwatchedAnimeService.GetByUserAndAnimeId(Guid.Parse(userIdStr), id);
+            var unwatched = _unwatchedAnimeService.GetByUserAndAnimeId(userIdStr, id);
             if(unwatched != null)
             {
                 TempData["MessageType"] = MessageType.Info;
                 TempData["Message"] = "This anime is already added to your watch list";
                 return RedirectToAction(nameof(Index));
             }
-                Guid userId = Guid.Parse(userIdStr);
-                _unwatchedAnimeService.AddToList(userId, anime);
+                _unwatchedAnimeService.AddToList(userIdStr, anime);
                 TempData["MessageType"] = MessageType.Success;
                 TempData["Message"] = $"Added {anime.Name} to watch list";
                 return RedirectToAction(nameof(Index));

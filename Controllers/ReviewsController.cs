@@ -28,14 +28,17 @@ namespace MyAnimeList.Web.Controllers
         }
         public IActionResult GetAllReviewsForAnime(Guid animeId)
         {
+            var anime = _animeService.GetById(animeId);
             var allReviews = _reviewService.GetAllReviewsByAnimeId(animeId);
+            ViewBag.Anime = anime;
+            
             return View(allReviews);
         }
         [HttpPost]
         [Authorize]
         public IActionResult AddReview(Guid animeId, string comment, int rating)
         {
-            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            var userId = _userManager.GetUserId(User);
             var review = _reviewService.AddReview(animeId, userId, rating, comment);
             TempData["MessageType"] = MessageType.Success;
             TempData["Message"] = "Successfully added review!";
@@ -43,7 +46,7 @@ namespace MyAnimeList.Web.Controllers
         }
         public IActionResult UpdateReview(Guid animeId)
         {
-            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            var userId = _userManager.GetUserId(User);
             var review = _reviewService.GetReview(animeId, userId);
             TempData["Content"] = review.Content;
             TempData["Rating"] = review.Rating;
@@ -53,7 +56,7 @@ namespace MyAnimeList.Web.Controllers
         [Authorize]
         public IActionResult UpdateReviewPost(Guid animeId, string comment, int rating)
         {
-            Guid userId = Guid.Parse(_userManager.GetUserId(User));
+            var userId = _userManager.GetUserId(User);
             var review = _reviewService.UpdateReview(animeId, userId, rating, comment);
             TempData["MessageType"] = MessageType.Success;
             TempData["Message"] = "Successfully updated review!";

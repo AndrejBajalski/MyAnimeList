@@ -49,3 +49,8 @@ body {
     color: white;
     background-color: #832be3;
 }
+.btn-yellow-1 {
+    padding: 10px;
+    color: white;
+    background-color: rgb(255, 193, 7);
+}

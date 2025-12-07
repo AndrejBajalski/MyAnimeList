@@ -25,8 +25,8 @@ namespace MyAnimeList.Web.Controllers
         {
             string? id = _userManager.GetUserId(User);
             myList = status == null ?
-                _unwatchedAnimeService.GetAllByUser(Guid.Parse(id)) :
-                _unwatchedAnimeService.GetByStatus(Guid.Parse(id), status.Value);
+                _unwatchedAnimeService.GetAllByUser(id) :
+                _unwatchedAnimeService.GetByStatus(id, status.Value);
             var statusCountDictionary = _unwatchedAnimeService.GetCountByStatus();
             ViewBag.StatusCount = new Dictionary<AnimeStatus, int>();
             ViewBag.Status = status ?? AnimeStatus.All;

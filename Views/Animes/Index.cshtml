@@ -69,10 +69,13 @@
 							}
 						</p>
 					</div>
-					<div style="position: relative; margin-top: 1rem">
+					<div class="w-100 d-flex justify-content-between" style="padding: 16px">
+						<a asp-controller="Reviews" asp-action="GetAllReviewsForAnime" asp-route-animeId="@anime.Id" class="btn btn-yellow-1 bottom-left-corner">
+							See reviews
+						</a>
 						@if (ViewBag.Statuses == null || ViewBag.Statuses[i]==AnimeStatus.NotInList)
 						{
-							<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn btn-primary bottom-right-corner bg-lilac-1" style="padding: 10px;">
+							<a asp-controller="Animes" asp-action="AddToList" asp-route-id="@anime.Id" class="btn bottom-right-corner btn-lilac-1" style="padding: 10px;">
 								Add To List
 							</a>
 						}
@@ -135,7 +138,6 @@
 		margin-right: 10px;
 		border-color: #832be3;
 	}
-
     .keyword-search-form button{
 		width: 15%;
 		font-size: 1.2rem;
@@ -143,9 +145,14 @@
 		box-sizing: border-box;
 		color: white;
 	}
-	.bottom-right-corner {
-		position: absolute;
-		right: 10px;
-		bottom: 10px;
-	}
+	/* .bottom-right-corner { */
+	/* 	position: absolute; */
+	/* 	right: 10px; */
+	/* 	bottom: 10px; */
+	/* } */
+	/* .bottom-right-corner { */
+	/* 	position: absolute; */
+	/* 	left: 10px; */
+	/* 	bottom: 10px; */
+	/* } */
 </style>
