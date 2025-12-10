@@ -2,13 +2,39 @@
 
 @model List<Review>
 
-<h2>All reviews for @ViewBag.Anime.Name</h2>
-<div class="all-reviews-main">
+<h2 class="text-lilac-2">All reviews for @ViewBag.Anime.Name</h2>
+<div class="all-reviews-main row">
+	<div class="image-container col-3">
+		<img src="@ViewBag.Anime?.ImageUrl" alt="thumbnail"/>
+	</div>
+	<div class="reviews-container col-9">
+		@if (Model.Count == 0)
+		{
+			<h2 class="text-secondary">No reviews have been posted for this anime yet</h2>
+		}
 	@foreach(var review in Model)
 	{
-		<div class="row">
-			<div><strong>User</strong></div>
-			<div>@review.Content</div>
+		<div class="review border-lilac-1">
+			<div style="display: flex; justify-content: space-between">
+				<p><strong>@review.User.Name @review.User.Surname</strong></p>
+				<p>@review.LastModified</p>
+			</div>
+			<p>Rated: @review.Rating/10</p>
+			<p>"@review.Content"</p>
 		</div>
 	}
+	</div>
 </div>
+
+<style>
+	.all-reviews-main{
+		margin-top: 3rem;
+	}
+	.review{
+		padding: 10px;
+		border-radius: 4px;
+		margin-bottom: 2rem;
+	}
+	.image-container{
+	}
+</style>

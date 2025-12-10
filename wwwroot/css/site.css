@@ -18,7 +18,14 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #1f1f1f;
+    color: white;
+}
+
+.navbar {
+    background-color: #0F0F0F;
+    color: #670CAD;
 }
 
 .success-box {
@@ -27,6 +34,15 @@ body {
     border-radius: 5px;
     color: #27D927;
     padding: 10px;
+}
+
+strong{
+    color: #832be3;
+}
+
+.card-body, .card:last-child, .row-0{
+    color: white;
+    background-color: #0f0f0f;
 }
 
 .bg-lilac-1 {
@@ -40,6 +56,15 @@ body {
 }
 .text-lilac-1 {
     color: #832be3;
+}
+.text-lilac-2 {
+    color: #670CAD;
+}
+.text-lilac-3, h1, h2, h3, h4, a, .form-label{
+    color: #AC00FF;
+}
+.nav-link {
+    color: #C39EF0 !important;
 }
 .border-lilac-1{
     border: 2px solid #832be3;

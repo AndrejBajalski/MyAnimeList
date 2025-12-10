@@ -12,13 +12,16 @@ namespace MyAnimeList.Web.Controllers
     {
         private readonly IReviewService _reviewService;
         private readonly IAnimeService _animeService;
+        private readonly IUnwatchedAnimeService _unwatchedAnimeService;
         private readonly UserManager<User> _userManager;
 
-        public ReviewsController(IReviewService reviewService, IAnimeService animeService, UserManager<User> userManager)
+
+        public ReviewsController(IReviewService reviewService, IAnimeService animeService, UserManager<User> userManager, IUnwatchedAnimeService unwatchedAnimeService)
         {
             _reviewService = reviewService;
             _animeService = animeService;
             _userManager = userManager;
+            _unwatchedAnimeService = unwatchedAnimeService;
         }
 
         public IActionResult Index(Guid animeId)
@@ -72,6 +75,17 @@ namespace MyAnimeList.Web.Controllers
             TempData["MessageType"] = MessageType.Success;
             TempData["Message"] = "Successfully posted a comment to this review";
             return RedirectToAction(nameof(GetAllReviewsForAnime), review.AnimeId);
+        }
+
+        public IActionResult RemoveReview(Guid animeId)
+        {
+            var userId = _userManager.GetUserId(User);
+            var review = _reviewService.GetReview(animeId, userId);
+            _unwatchedAnimeService.UpdateStatus(animeId, userId, AnimeStatus.Completed);
+            _reviewService.RemoveReview(review);
+            TempData["MessageType"] = MessageType.Success;
+            TempData["Message"] = "Successfully deleted review";
+            return RedirectToAction("Index", "WatchList");
         }
     }
 }

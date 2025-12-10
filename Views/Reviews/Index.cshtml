@@ -26,18 +26,21 @@
 				{
 					int val = i + 5;
 					if(update && val==rating){
-					<option value="@val" selected>@(val + " - " + ratingLabels[i])</option>
-				}else{
-					<option value="@val">@(val + " - " + ratingLabels[i])</option>
+						<option value="@val" selected>@(val + " - " + ratingLabels[i])</option>
+					}else{
+						<option value="@val">@(val + " - " + ratingLabels[i])</option>
+					}
 				}
-			}
 			</select>
 		</div>
 		<div>
 			<h4>Write your review</h4>
 			<textarea id="add-review-text" type="text" name="comment" placeholder="Write your comments about this anime...">@reviewText</textarea>
 		</div>
-		<button type="submit" class="btn btn-lilac-1">@(update? "Edit Review" : "Add Review")</button>
+		<div class="d-flex justify-content-between">
+			<button type="submit" class="btn btn-lilac-1">@(update? "Edit Review" : "Add Review")</button>
+			<a asp-action="RemoveReview" asp-route-animeId="@Model.Id" class="btn btn-danger" style="padding: 10px">Delete Review</a>
+		</div>
 	</form>
 </div>
 
