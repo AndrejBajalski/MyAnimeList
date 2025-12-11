@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-MyAnimeList-0ea4923a-0446-43a3-83c0-8847ccb0da12</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.14" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>
 

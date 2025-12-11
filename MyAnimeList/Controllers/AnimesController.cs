@@ -26,6 +26,8 @@ namespace MyAnimeList.Web.Controllers
             _userManager = userManager;
         }
 
+        [Route("/")]
+        [Route("/Animes")]
         public async Task<IActionResult> Index(string? keyword, int page=1)
         {
             PaginatedResponse response = await _animeService.GetAll(keyword, page);
